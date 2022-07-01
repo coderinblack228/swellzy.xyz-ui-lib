@@ -1,7 +1,7 @@
 local httpService = game:GetService('HttpService')
 
 local SaveManager = {} do
-	SaveManager.Folder = '$wellzy.xyz Configs/Counter Blox'
+	SaveManager.Folder = '$wellzy.xyz/configs/'
 	SaveManager.Ignore = {}
 	SaveManager.Parser = {
 		Toggle = {
