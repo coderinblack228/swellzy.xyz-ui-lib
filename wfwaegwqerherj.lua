@@ -4928,6 +4928,26 @@ function library:CreateSettingsTab(menu)
             main_section:AddBind({text = "Open / Close", flag = "togglebind", nomouse = true, noindicator = true, bind = Enum.KeyCode.End, callback = function()
                 library:SetOpen(not library.open)
             end});
+			
+	    main_section:AddSeparator({text = 'Keybinds'});
+    	    main_section:AddToggle({text = 'Keybind Indicator', flag = 'keybind_indicator', callback = function(bool)
+        	library.keyIndicator:SetEnabled(bool);
+            end})
+    	    main_section:AddSlider({text = 'Position X', flag = 'keybind_indicator_x', min = 0, max = 100, increment = .1, value = .5, callback = function()
+        	library.keyIndicator:SetPosition(newUDim2(library.flags.keybind_indicator_x / 100, 0, library.flags.keybind_indicator_y / 100, 0));    
+    	    end});
+	    main_section:AddSlider({text = 'Position Y', flag = 'keybind_indicator_y', min = 0, max = 100, increment = .1, value = 35, callback = function()
+		library.keyIndicator:SetPosition(newUDim2(library.flags.keybind_indicator_x / 100, 0, library.flags.keybind_indicator_y / 100, 0));    
+	    end});
+
+	    main_section:AddSeparator({text = 'Watermark'})
+	    main_section:AddToggle({text = 'Enabled', flag = 'watermark_enabled'});
+	    main_section:AddList({text = 'Position', flag = 'watermark_pos', selected = 'Custom', values = {'Top', 'Top Left', 'Top Right', 'Bottom Left', 'Bottom Right', 'Custom'}, callback = function(val)
+		library.watermark.lock = val;
+	    end})
+	    main_section:AddSlider({text = 'Custom X', flag = 'watermark_x', suffix = '%', min = 0, max = 100, increment = .1});
+	    main_section:AddSlider({text = 'Custom Y', flag = 'watermark_y', suffix = '%', min = 0, max = 100, increment = .1});	
+			
             main_section:AddButton({text = "Join Discord",  callback = function()
                 local res = syn.request({
                     Url = "http://127.0.0.1:6463/rpc?v=1",
