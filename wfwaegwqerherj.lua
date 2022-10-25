@@ -4972,6 +4972,9 @@ function library:CreateSettingsTab(menu)
             main_section:AddButton({text = "Rejoin Game", confirm = true, callback = function()
                 game:GetService("TeleportService"):Teleport(game.PlaceId);
             end})
+	    main_section:AddButton({text = 'Unload', confirm = true, callback = function()
+		library:Unload();
+	    end})			
 
             main_section:AddBox({text = "Cheat Name", flag = "cheat_name", input = library.cheatname, callback = function(txt)
                 library.change_name(txt, flags.cheat_domain);
