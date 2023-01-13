@@ -38,17 +38,17 @@ end
 local esp = {
     drawings = {};
     textlayout = {
-        ['name'] = {pos = 'top', enabled = true, color = Color3.new(1,1,1), transparency = 1};
-        ['distance'] = {pos = 'bottom', enabled = true, suffix = ' studs', color = Color3.new(1,1,1), transparency = 1};
-        ['health'] = {pos = 'left', enabled = true, color = Color3.new(0,1,0), transparency = 1}
+        ['name'] = {pos = 'top', enabled = false, color = Color3.new(1,1,1), transparency = 1};
+        ['distance'] = {pos = 'bottom', enabled = false, suffix = ' studs', color = Color3.new(1,1,1), transparency = 1};
+        ['health'] = {pos = 'left', enabled = false, color = Color3.new(0,1,0), transparency = 1}
     };
     barlayout = {
-        ['health'] = {pos = 'left', enabled = true, color1 = Color3.new(1,0,0), color2 = Color3.new(0,1,0), transparency = 1};
+        ['health'] = {pos = 'left', enabled = false, color1 = Color3.new(1,0,0), color2 = Color3.new(0,1,0), transparency = 1};
     };
     targets = {};
-    enabled = true;
-    teamcheck = true;
-    limitdistance = true;
+    enabled = false;
+    teamcheck = false;
+    limitdistance = false;
     displaynames = false;
     maxdistance = 2500;
     arrowradius = 300;
@@ -58,7 +58,7 @@ local esp = {
     chams = {false, Color3.new(0,0,1), Color3.new(0,0,0), .25, .75};
     box = {true, Color3.new(1,1,1)};
     boxfill = {false, Color3.new(.5,0,0), .25};
-    arrow = {true, Color3.new(1,1,1)};
+    arrow = {false, Color3.new(1,1,1)};
     arrowfilltrans = .3;
     arrowsizemodifier = 20;
 	arrowpoints = 35;
