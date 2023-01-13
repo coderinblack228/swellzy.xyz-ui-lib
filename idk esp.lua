@@ -1,3 +1,4 @@
+rconsolename('esp module');
 if esp then
     esp:unload();
 end
@@ -37,31 +38,34 @@ end
 local esp = {
     drawings = {};
     textlayout = {
-        ['name'] = {pos = 'top', enabled = false, color = Color3.new(1,1,1), transparency = 1};
-        ['distance'] = {pos = 'bottom', enabled = false, suffix = ' studs', color = Color3.new(1,1,1), transparency = 1};
-        ['health'] = {pos = 'left', enabled = false, color = Color3.new(0,1,0), transparency = 1}
+        ['name'] = {pos = 'top', enabled = true, color = Color3.new(1,1,1), transparency = 1};
+        ['distance'] = {pos = 'bottom', enabled = true, suffix = ' studs', color = Color3.new(1,1,1), transparency = 1};
+        ['health'] = {pos = 'left', enabled = true, color = Color3.new(0,1,0), transparency = 1}
     };
     barlayout = {
-        ['health'] = {pos = 'left', enabled = false, color1 = Color3.new(1,0,0), color2 = Color3.new(0,1,0), transparency = 1};
+        ['health'] = {pos = 'left', enabled = true, color1 = Color3.new(1,0,0), color2 = Color3.new(0,1,0), transparency = 1};
     };
     targets = {};
-    enabled = false;
-    teamcheck = false;
-    limitdistance = false;
+    enabled = true;
+    teamcheck = true;
+    limitdistance = true;
     displaynames = false;
     maxdistance = 2500;
     arrowradius = 300;
     textsize = 13;
     textfont = 2;
     targetcolor = Color3.new(1,.15,.15);
-    chams = {false, Color3.new(0,0,1), Color3.new(0,0,0), .25, 0};
-    box = {false, Color3.new(1,1,1)};
+    chams = {false, Color3.new(0,0,1), Color3.new(0,0,0), .25, .75};
+    box = {true, Color3.new(1,1,1)};
     boxfill = {false, Color3.new(.5,0,0), .25};
-    arrow = {false, Color3.new(1,1,1)};
+    arrow = {true, Color3.new(1,1,1)};
+    arrowfilltrans = .3;
+    arrowsizemodifier = 20;
+	arrowpoints = 35;
     angle = {false, Color3.new(1,1,1)};
     tracer = {false, Color3.new(1,1,1)};
-    skeleton = {false, Color3.new(1,1,1)};
-    outline = {false, Color3.new(0,0,0)};
+    skeleton = {true, Color3.new(1,1,1)};
+    outline = {true, Color3.new(0,0,0)};
 };
 
 esp.skeletonLayout = {
@@ -104,7 +108,7 @@ function esp:check(plr)
         pass = false;
     end
 
-    if pass and not (esp.teamcheck and (esp.GetPlayerTeam(plr) ~= esp.GetPlayerTeam(localPlayer)) or true) then
+    if pass and (esp.teamcheck and (esp.GetPlayerTeam(plr) == esp.GetPlayerTeam(localPlayer))) then
         pass = false;
     end
 
@@ -148,11 +152,12 @@ function esp:init()
     function esp.new(plr)
         esp.drawings[plr] = {
             boxfill = newDrawing('Square', {Thickness = 1, Transparency = .5, Filled = true});
-            boxoutline = newDrawing('Square', {Thickness = 3});
-            box = newDrawing('Square', {Thickness = 1});
+            boxoutline = newDrawing('Square', {Thickness = 3, Filled = false});
+            box = newDrawing('Square', {Thickness = 1, Filled = false});
             tracer = newDrawing('Line', {Thickness = 1});
             angle = newDrawing('Line', {Thickness = 1});
-            arrow = newDrawing('Triangle', {Filled = true, ZIndex = 3});
+            arrow = newDrawing('Triangle', {Filled = false, ZIndex = 3});
+            arrowfill = newDrawing('Triangle', {Filled = true, ZIndex = 3});
             chams = newInst('Highlight', {Parent = workspace, DepthMode = Enum.HighlightDepthMode.AlwaysOnTop});
             skeleton = {};
             text = {};
@@ -249,15 +254,21 @@ function esp:init()
                     end
 
                     data.arrow.Visible = esp.arrow[1] and pass and not onScreen;
+                    data.arrowfill.Visible = data.arrow.Visible;
                     if data.arrow.Visible then
                         local proj = camera.CFrame:PointToObjectSpace(HRP.Position);
                         local ang = math.atan2(proj.Z, proj.X);
                         local dir = Vector2.new(math.cos(ang), math.sin(ang));
                         local pos = (dir * esp.arrowradius * .5) + camera.ViewportSize / 2;
                         data.arrow.PointA = pos;
-                        data.arrow.PointB = pos - rotateVector2(dir, math.rad(35)) * 15;
-                        data.arrow.PointC = pos - rotateVector2(dir, -math.rad(35)) * 15;
+                        data.arrow.PointB = pos - rotateVector2(dir, math.rad(esp.arrowpoints)) * esp.arrowsizemodifier;
+                        data.arrow.PointC = pos - rotateVector2(dir, -math.rad(esp.arrowpoints)) * esp.arrowsizemodifier;
                         data.arrow.Color = esp.arrow[2];
+                        data.arrowfill.PointA = data.arrow.PointA;
+                        data.arrowfill.PointB = data.arrow.PointB;
+                        data.arrowfill.PointC = data.arrow.PointC;
+                        data.arrowfill.Color = data.arrow.Color;
+                        data.arrowfill.Transparency = esp.arrowfilltrans
                     end
 
                     data.chams.Enabled = esp.chams[1] and pass;
@@ -429,6 +440,7 @@ function esp:init()
                                         used += 1
 
                                         if obj.Visible then
+                                            obj.Thickness = 1
                                             local pointA, pointB = skeletonCache[a], skeletonCache[b];
                                             if not pointA then
                                                 local inst = char[aSplit[1]];
@@ -468,7 +480,7 @@ function esp:init()
                     end
                 end)
                 if not s then
-                    printconsole('octohook esp module | '..e..'\n'..debug.traceback(), 255,135,255);
+                    rconsoleerr('esp module | '..e..'\n'..debug.traceback(), 255,135,255);
                 end
             end
         end)
@@ -477,4 +489,5 @@ function esp:init()
 end
 
 getgenv().esp = esp;
+esp:init();
 return esp
