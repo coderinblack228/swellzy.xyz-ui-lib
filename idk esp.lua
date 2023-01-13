@@ -56,7 +56,7 @@ local esp = {
     textfont = 2;
     targetcolor = Color3.new(1,.15,.15);
     chams = {false, Color3.new(0,0,1), Color3.new(0,0,0), .25, .75};
-    box = {true, Color3.new(1,1,1)};
+    box = {false, Color3.new(1,1,1)};
     boxfill = {false, Color3.new(.5,0,0), .25};
     arrow = {false, Color3.new(1,1,1)};
     arrowfilltrans = .3;
@@ -64,8 +64,8 @@ local esp = {
 	arrowpoints = 35;
     angle = {false, Color3.new(1,1,1)};
     tracer = {false, Color3.new(1,1,1)};
-    skeleton = {true, Color3.new(1,1,1)};
-    outline = {true, Color3.new(0,0,0)};
+    skeleton = {false, Color3.new(1,1,1)};
+    outline = {false, Color3.new(0,0,0)};
 };
 
 esp.skeletonLayout = {
