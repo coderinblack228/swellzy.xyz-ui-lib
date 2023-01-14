@@ -1,4 +1,3 @@
-rconsolename('esp module');
 if esp then
     esp:unload();
 end
